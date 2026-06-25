@@ -1,0 +1,18 @@
+{"category": "mets", "question": "Which seasons ended with the Mets as world champions?", "must_include_any": [["1969"], ["1986"]], "note": "paraphrase of 'in what years did the Mets win the World Series'"}
+{"category": "mets", "question": "How many decades has it been since the Mets' most recent championship?", "must_include_any": [["1986"]], "note": "tests recall of last title year via different framing"}
+{"category": "mets", "question": "Where do the Mets play their home games today?", "must_include_any": [["Citi Field"]], "note": "paraphrase of ballpark question"}
+{"category": "mets", "question": "Which pitcher is nicknamed 'The Franchise' in Mets history?", "must_include_any": [["Seaver"]], "note": "Tom Seaver via nickname only"}
+{"category": "mets", "question": "Who was the skipper when the Mets won it all in 1986?", "must_include_any": [["Johnson"]], "note": "Davey Johnson, 'skipper' instead of 'manager'"}
+{"category": "mets", "question": "What is the popular nickname for the 1969 Mets team?", "must_include_any": [["Miracle"], ["Amazin"]], "note": "Miracle Mets"}
+{"category": "mets", "question": "In which year did the Mets begin play as a brand-new franchise?", "must_include_any": [["1962"]], "note": "expansion year, reworded"}
+{"category": "rules", "question": "A pitcher throws four pitches outside the zone that the hitter lets go by. What happens?", "must_include_any": [["walk"], ["base on balls"], ["first base"]], "note": "scenario form of the walk rule"}
+{"category": "rules", "question": "How long does a standard ballgame last before extra innings are possible?", "must_include_any": [["nine", "9"]], "note": "nine innings, reworded"}
+{"category": "rules", "question": "Describe the area a pitch must cross to be called a strike when the batter doesn't swing.", "must_include_any": [["plate"], ["knee"], ["zone"]], "note": "strike zone, definition by description"}
+{"category": "rules", "question": "How many defenders does a team position on the diamond at once?", "must_include_any": [["nine", "9"]], "note": "nine fielders, reworded"}
+{"category": "stats", "question": "If I divide a pitcher's earned runs by innings and multiply by nine, what number am I computing?", "must_include_any": [["ERA"], ["earned run average"]], "note": "ERA by its formula"}
+{"category": "stats", "question": "Which stat adds together how often a player reaches base and how hard they hit?", "must_include_any": [["OPS"], ["on-base plus slugging"]], "note": "OPS by description"}
+{"category": "stats", "question": "What do you call hits divided by at-bats?", "must_include_any": [["batting average"], ["AVG"]], "note": "batting average by formula"}
+{"category": "stats", "question": "Which advanced metric estimates a player's total value in extra wins over a replacement-level player?", "must_include_any": [["WAR"], ["wins above replacement"]], "note": "WAR by description"}
+{"category": "stats", "question": "A batter drives a teammate home with a hit. Which counting stat does the batter earn?", "must_include_any": [["RBI"], ["run batted in"]], "note": "RBI by scenario"}
+{"category": "control", "question": "What is the capital of France?", "must_include_any": [["Paris"]], "note": "non-baseball control: detect catastrophic forgetting"}
+{"category": "control", "question": "What is 12 multiplied by 8?", "must_include_any": [["96"]], "note": "non-baseball control: basic arithmetic retention"}

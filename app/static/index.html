@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mets Fine-Tune Comparison</title>
+<style>
+  :root { --mets-blue:#002D72; --mets-orange:#FF5910; --bg:#f4f6f9; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+         background:var(--bg); color:#1a1a1a; }
+  header { background:var(--mets-blue); color:#fff; padding:18px 24px;
+           display:flex; align-items:center; gap:14px; }
+  header h1 { font-size:20px; margin:0; }
+  header .pill { background:var(--mets-orange); color:#fff; font-size:12px;
+                 padding:3px 10px; border-radius:20px; font-weight:600; }
+  .status { margin-left:auto; font-size:13px; opacity:.9; }
+  .wrap { max-width:1100px; margin:0 auto; padding:24px; }
+  .ask { display:flex; gap:10px; margin-bottom:8px; }
+  .ask input { flex:1; padding:13px 14px; font-size:16px; border:1px solid #cbd2dc;
+               border-radius:8px; }
+  .ask button { padding:0 22px; font-size:16px; font-weight:600; border:none;
+                border-radius:8px; background:var(--mets-orange); color:#fff;
+                cursor:pointer; }
+  .ask button:disabled { opacity:.5; cursor:default; }
+  .examples { font-size:13px; color:#555; margin-bottom:20px; }
+  .examples a { color:var(--mets-blue); cursor:pointer; margin-right:12px;
+                text-decoration:underline; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .card { background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,.08);
+          overflow:hidden; display:flex; flex-direction:column; min-height:180px; }
+  .card h2 { margin:0; padding:12px 16px; font-size:15px; color:#fff; }
+  .card.base h2 { background:#6b7280; }
+  .card.tuned h2 { background:var(--mets-blue); }
+  .card .body { padding:16px; font-size:15px; line-height:1.55; white-space:pre-wrap;
+                flex:1; }
+  .muted { color:#9aa3af; font-style:italic; }
+  .warn { background:#fff3cd; color:#7a5b00; padding:10px 14px; border-radius:8px;
+          font-size:13px; margin-bottom:16px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="pill">⚾ METS</span>
+  <h1>Base vs. Fine-Tuned — Side-by-Side</h1>
+  <span class="status" id="status">…</span>
+</header>
+<div class="wrap">
+  <div id="warn" class="warn" style="display:none"></div>
+  <div class="ask">
+    <input id="q" placeholder="Ask a Mets question…"
+           value="When did the Mets last win the World Series?">
+    <button id="go" onclick="ask()">Ask both</button>
+  </div>
+  <div class="examples">
+    Try:
+    <a onclick="setQ('In what years did the Mets win the World Series?')">championships</a>
+    <a onclick="setQ('What is the name of the Mets home ballpark?')">ballpark</a>
+    <a onclick="setQ('Who is Tom Seaver?')">Tom Seaver</a>
+    <a onclick="setQ('Which jersey numbers have the Mets retired?')">retired numbers</a>
+  </div>
+  <div class="cols">
+    <div class="card base">
+      <h2>🧊 Base model (untuned)</h2>
+      <div class="body" id="base"><span class="muted">Answer will appear here.</span></div>
+    </div>
+    <div class="card tuned">
+      <h2>🎯 Fine-tuned on Mets</h2>
+      <div class="body" id="tuned"><span class="muted">Answer will appear here.</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+function setQ(t){ $('q').value = t; ask(); }
+
+async function loadStatus(){
+  try{
+    const s = await (await fetch('/api/status')).json();
+    $('status').textContent = s.base_model + (s.has_adapter ? ' · adapter ✓' : ' · no adapter yet');
+    if(!s.has_adapter){
+      const w = $('warn');
+      w.style.display='block';
+      w.textContent = '⚠ No fine-tuned adapter found yet. Run scripts/04_train_qlora.py — until then both columns show the base model.';
+    }
+  }catch(e){ $('status').textContent='server starting…'; }
+}
+
+async function ask(){
+  const question = $('q').value.trim();
+  if(!question) return;
+  $('go').disabled = true;
+  $('base').innerHTML = '<span class="muted">thinking…</span>';
+  $('tuned').innerHTML = '<span class="muted">thinking…</span>';
+  try{
+    const r = await fetch('/api/ask', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({question})
+    });
+    const d = await r.json();
+    $('base').textContent = d.base || '(empty)';
+    $('tuned').textContent = d.tuned || '(empty)';
+  }catch(e){
+    $('base').textContent = $('tuned').textContent = 'Error: ' + e;
+  }finally{
+    $('go').disabled = false;
+  }
+}
+loadStatus();
+</script>
+</body>
+</html>
